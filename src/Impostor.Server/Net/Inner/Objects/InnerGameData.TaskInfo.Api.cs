@@ -23,7 +23,13 @@ namespace Impostor.Server.Net.Inner.Objects
                 await _game.FinishRpcAsync(writer);
 
                 // Notify plugins.
-                await _eventManager.CallAsync(new PlayerCompletedTaskEvent(_game, _game.GetClientPlayer(_player.OwnerId), _player, this));
+                Api.Net.IClientPlayer? target = _game.GetClientPlayer(_player.OwnerId);
+                if (target == null)
+                {
+                    return;
+                }
+
+                await _eventManager.CallAsync(new PlayerCompletedTaskEvent(_game, target, _player, this));
             }
         }
     }

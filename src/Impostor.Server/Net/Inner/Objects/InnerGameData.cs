@@ -160,6 +160,10 @@ namespace Impostor.Server.Net.Inner.Objects
             }
 
             player.Tasks = new List<TaskInfo>(taskTypeIds.Length);
+            if (player.Controller == null)
+            {
+                return;
+            }
 
             foreach (var taskId in taskTypeIds.ToArray())
             {

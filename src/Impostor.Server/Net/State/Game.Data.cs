@@ -47,118 +47,18 @@ namespace Impostor.Server.Net.State
         };
 
         private readonly List<InnerNetObject> _allObjects = new List<InnerNetObject>();
+
         private readonly Dictionary<uint, InnerNetObject> _allObjectsFast = new Dictionary<uint, InnerNetObject>();
 
-        private int _gamedataInitialized;
-
-        private async ValueTask OnSpawnAsync(InnerNetObject netObj)
+        public T? FindObjectByNetId<T>(uint netId)
+            where T : IInnerNetObject
         {
-            switch (netObj)
+            if (_allObjectsFast.TryGetValue(netId, out var obj))
             {
-                case InnerLobbyBehaviour lobby:
-                {
-                    GameNet.LobbyBehaviour = lobby;
-                    break;
-                }
-
-                case InnerGameData data:
-                {
-                    GameNet.GameData = data;
-                    break;
-                }
-
-                case InnerVoteBanSystem voteBan:
-                {
-                    GameNet.VoteBan = voteBan;
-                    break;
-                }
-
-                case InnerShipStatus shipStatus:
-                {
-                    GameNet.ShipStatus = shipStatus;
-                    break;
-                }
-
-                case InnerPlayerControl control:
-                {
-                    // Hook up InnerPlayerControl <-> IClientPlayer.
-                    if (!TryGetPlayer(control.OwnerId, out var player))
-                    {
-                        throw new ImpostorException("Failed to find player that spawned the InnerPlayerControl");
-                    }
-
-                    player.Character = control;
-                    player.DisableSpawnTimeout();
-
-                    // Hook up InnerPlayerControl <-> InnerPlayerControl.PlayerInfo.
-                    control.PlayerInfo = GameNet.GameData.GetPlayerById(control.PlayerId)!;
-
-                    if (control.PlayerInfo == null)
-                    {
-                        GameNet.GameData.AddPlayer(control);
-                    }
-
-                    if (control.PlayerInfo != null)
-                    {
-                        control.PlayerInfo!.Controller = control;
-                    }
-
-                    await _eventManager.CallAsync(new PlayerSpawnedEvent(this, player, control));
-
-                    break;
-                }
-
-                case InnerMeetingHud meetingHud:
-                {
-                    await _eventManager.CallAsync(new MeetingStartedEvent(this, meetingHud));
-                    break;
-                }
+                return (T)(IInnerNetObject)obj;
             }
-        }
 
-        private async ValueTask OnDestroyAsync(InnerNetObject netObj)
-        {
-            switch (netObj)
-            {
-                case InnerLobbyBehaviour:
-                {
-                    GameNet.LobbyBehaviour = null;
-                    break;
-                }
-
-                case InnerGameData:
-                {
-                    GameNet.GameData = null;
-                    break;
-                }
-
-                case InnerVoteBanSystem:
-                {
-                    GameNet.VoteBan = null;
-                    break;
-                }
-
-                case InnerShipStatus:
-                {
-                    GameNet.ShipStatus = null;
-                    break;
-                }
-
-                case InnerPlayerControl control:
-                {
-                    // Remove InnerPlayerControl <-> IClientPlayer.
-                    if (TryGetPlayer(control.OwnerId, out var player))
-                    {
-                        player.Character = null;
-                    }
-
-                    await _eventManager.CallAsync(new PlayerDestroyedEvent(this, player, control));
-
-                    break;
-                }
-
-
-            }
+            return default;
         }
 
         public async ValueTask<bool> HandleGameDataAsync(IMessageReader parent, ClientPlayer sender, bool toPlayer)
@@ -393,6 +293,115 @@ namespace Impostor.Server.Net.State
             return true;
         }
 
+        private async ValueTask OnSpawnAsync(InnerNetObject netObj)
+        {
+            switch (netObj)
+            {
+                case InnerLobbyBehaviour lobby:
+                {
+                    GameNet.LobbyBehaviour = lobby;
+                    break;
+                }
+
+                case InnerGameData data:
+                {
+                    GameNet.GameData = data;
+                    break;
+                }
+
+                case InnerVoteBanSystem voteBan:
+                {
+                    GameNet.VoteBan = voteBan;
+                    break;
+                }
+
+                case InnerShipStatus shipStatus:
+                {
+                    GameNet.ShipStatus = shipStatus;
+                    break;
+                }
+
+                case InnerPlayerControl control:
+                {
+                    // Hook up InnerPlayerControl <-> IClientPlayer.
+                    if (!TryGetPlayer(control.OwnerId, out var player))
+                    {
+                        throw new ImpostorException("Failed to find player that spawned the InnerPlayerControl");
+                    }
+
+                    player.Character = control;
+                    player.DisableSpawnTimeout();
+
+                    // Hook up InnerPlayerControl <-> InnerPlayerControl.PlayerInfo.
+                    control.PlayerInfo = GameNet.GameData.GetPlayerById(control.PlayerId)!;
+
+                    if (control.PlayerInfo == null)
+                    {
+                        GameNet.GameData.AddPlayer(control);
+                    }
+
+                    if (control.PlayerInfo != null)
+                    {
+                        control.PlayerInfo!.Controller = control;
+                    }
+
+                    await _eventManager.CallAsync(new PlayerSpawnedEvent(this, player, control));
+
+                    break;
+                }
+
+                case InnerMeetingHud meetingHud:
+                {
+                    await _eventManager.CallAsync(new MeetingStartedEvent(this, meetingHud));
+                    break;
+                }
+            }
+        }
+
+        private async ValueTask OnDestroyAsync(InnerNetObject netObj)
+        {
+            switch (netObj)
+            {
+                case InnerLobbyBehaviour:
+                {
+                    GameNet.LobbyBehaviour = null;
+                    break;
+                }
+
+                case InnerGameData:
+                {
+                    GameNet.GameData = null;
+                    break;
+                }
+
+                case InnerVoteBanSystem:
+                {
+                    GameNet.VoteBan = null;
+                    break;
+                }
+
+                case InnerShipStatus:
+                {
+                    GameNet.ShipStatus = null;
+                    break;
+                }
+
+                case InnerPlayerControl control:
+                {
+                    // Remove InnerPlayerControl <-> IClientPlayer.
+                    if (TryGetPlayer(control.OwnerId, out var player))
+                    {
+                        player.Character = null;
+                    }
+
+                    await _eventManager.CallAsync(new PlayerDestroyedEvent(this, player, control));
+
+                    break;
+                }
+            }
+        }
+
+
         private bool AddNetObject(InnerNetObject obj)
         {
             if (_allObjectsFast.ContainsKey(obj.NetId))
@@ -418,15 +427,6 @@ namespace Impostor.Server.Net.State
             obj.NetId = uint.MaxValue;
         }
 
-        public T? FindObjectByNetId<T>(uint netId)
-            where T : IInnerNetObject
-        {
-            if (_allObjectsFast.TryGetValue(netId, out var obj))
-            {
-                return (T)(IInnerNetObject)obj;
-            }
-
-            return default;
-        }
+        private int _gamedataInitialized;
     }
 }

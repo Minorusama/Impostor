@@ -72,7 +72,11 @@ namespace Impostor.Server.Net.Inner.Objects
             var taskCount = reader.ReadByte();
             for (var i = 0; i < taskCount; i++)
             {
-                Tasks[i] ??= new InnerGameData.TaskInfo(eventManager, game, Controller);
+                if (Controller != null)
+                {
+                    Tasks[i] ??= new InnerGameData.TaskInfo(eventManager, game, Controller);
+                }
+
                 Tasks[i].Deserialize(reader);
             }
         }

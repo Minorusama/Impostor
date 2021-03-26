@@ -75,7 +75,7 @@ namespace Impostor.Server.Net.Inner.Objects
                         26 => TaskTypes.SkeldElectricalDivertPowerToNavigation,
                         27 => TaskTypes.SkeldElectricalDivertPowerToLowerEngine,
                         28 => TaskTypes.SkeldElectricalDivertPowerToSecurity,
-                        _ => throw new ArgumentException($"Invalid task id {taskId} for map {map}")
+                        _ => throw new ArgumentException($"Invalid task id {taskId} for map {map}"),
                     },
                     MapTypes.MiraHQ => taskId switch
                     {
@@ -105,7 +105,7 @@ namespace Impostor.Server.Net.Inner.Objects
                         23 => TaskTypes.MiraOfficeProcessData,
                         24 => TaskTypes.MiraLaunchpadRunDiagnostics,
                         25 => TaskTypes.MiraReactorUnlockManifolds,
-                        _ => throw new ArgumentException($"Invalid task id {taskId} for map {map}")
+                        _ => throw new ArgumentException($"Invalid task id {taskId} for map {map}"),
                     },
                     MapTypes.Polus => taskId switch
                     {
@@ -142,7 +142,7 @@ namespace Impostor.Server.Net.Inner.Objects
                         30 => TaskTypes.PolusLaboratoryRepairDrill,
                         31 => TaskTypes.PolusLaboratoryRecordTemperature,
                         32 => TaskTypes.PolusOutsideRecordTemperature,
-                        _ => throw new ArgumentException($"Invalid task id {taskId} for map {map}")
+                        _ => throw new ArgumentException($"Invalid task id {taskId} for map {map}"),
                     },
                     _ => throw new ArgumentException($"Invalid task id {taskId} for map {map}"),
                 };
