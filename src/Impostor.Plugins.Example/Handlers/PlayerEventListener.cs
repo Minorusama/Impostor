@@ -1,6 +1,7 @@
-﻿using System;
+using System;
 using System.Numerics;
 using System.Threading.Tasks;
+using Impostor.Api;
 using Impostor.Api.Events;
 using Impostor.Api.Events.Player;
 using Impostor.Api.Innersloth.Customization;
@@ -87,6 +88,11 @@ namespace Impostor.Plugins.Example.Handlers
                 await e.PlayerControl.NetworkTransform.SnapToAsync(new Vector2(1, 1));
             }
 
+            if (e.Message == "taskfinish")
+            {
+                await e.PlayerControl.SetAllTasksCompleteAsync();
+            }
+
             await e.PlayerControl.SetNameAsync(e.Message);
             await e.PlayerControl.SendChatAsync(e.Message);
         }
@@ -95,6 +101,12 @@ namespace Impostor.Plugins.Example.Handlers
         public void OnPlayerStartMeetingEvent(IPlayerStartMeetingEvent e)
         {
             _logger.LogDebug($"Player {e.PlayerControl.PlayerInfo.PlayerName} start meeting, reason: " + (e.Body == null ? "Emergency call button" : "Found the body of the player " + e.Body.PlayerInfo.PlayerName));
+        }
+
+        [EventListener]
+        public void OnPlayerCompletedTask(IPlayerCompletedTaskEvent e)
+        {
+            _logger.LogDebug($"Player {e.PlayerControl.PlayerInfo.PlayerName} completed a task, Task: {e.Task.Type} of {e.Task.Type.GetCategory()}");
         }
     }
 }
