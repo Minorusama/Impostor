@@ -1,5 +1,6 @@
 using System.Linq;
 using System.Threading.Tasks;
+using Impostor.Api.Net.Inner;
 using Impostor.Api.Net.Inner.Objects;
 using Impostor.Server.Events.Player;
 

@@ -17,6 +17,8 @@ namespace Impostor.Api
                 or TaskTypes.PolusDropshipInsertKeys
                 or TaskTypes.PolusOfficeScanBoardingPass
                 or TaskTypes.PolusElectricalFixWiring
+                or TaskTypes.AirshipElectricalFixWiring
+                or TaskTypes.AirshipMeetingRoomEnterIDCode
                 => TaskCategories.CommonTask,
 
                 TaskTypes.SkeldWeaponsClearAsteroids
@@ -53,6 +55,23 @@ namespace Impostor.Api
                 or TaskTypes.PolusOutsideFixWeatherNodeNode_PD
                 or TaskTypes.PolusOutsideFixWeatherNodeNode_TB
                 or TaskTypes.PolusCommunicationsRebootWiFi
+                or TaskTypes.AirshipResetBreakers
+                or TaskTypes.AirshipVaultUploadData
+                or TaskTypes.AirshipBrigUploadData
+                or TaskTypes.AirshipCargoBayUploadData
+                or TaskTypes.AirshipGapRoomUploadData
+                or TaskTypes.AirshipRecordsUploadData
+                or TaskTypes.AirshipCargoBayUnlockSafe
+                or TaskTypes.AirshipMainHallEmptyGarbage
+                or TaskTypes.AirshipMedicalEmptyGarbage
+                or TaskTypes.AirshipKitchenEmptyGarbage
+                or TaskTypes.AirshipMainHallDevelopPhotos
+                or TaskTypes.AirshipArmoryUploadData
+                or TaskTypes.AirshipCockpitUploadData
+                or TaskTypes.AirshipCommunicationsUploadData
+                or TaskTypes.AirshipMedicalUploadData
+                or TaskTypes.AirshipViewingDeckUploadData
+                or TaskTypes.AirshipRecordsSortRecords
                 => TaskCategories.LongTask,
 
                 TaskTypes.SkeldCommunicationsDownloadData
@@ -101,6 +120,28 @@ namespace Impostor.Api
                 or TaskTypes.PolusLaboratoryRepairDrill
                 or TaskTypes.PolusLaboratoryRecordTemperature
                 or TaskTypes.PolusOutsideRecordTemperature
+                or TaskTypes.AirshipUNKNOWN
+                or TaskTypes.AirshipVentilationStartFans
+                or TaskTypes.AirshipCargoBayFuelEngines
+                or TaskTypes.AirshipSecurityRewindTapes
+                or TaskTypes.AirshipVaultPolishRuby
+                or TaskTypes.AirshipElectricalCalibrateDistributor
+                or TaskTypes.AirshipStabilizeSteering
+                or TaskTypes.AirshipArmoryDivertPower
+                or TaskTypes.AirshipCockpitDivertPower
+                or TaskTypes.AirshipGapRoomDivertPower
+                or TaskTypes.AirshipMainHallDivertPower
+                or TaskTypes.AirshipMeetingRoomDivertPower
+                or TaskTypes.AirshipShowersDivertPower
+                or TaskTypes.AirshipEngineRoomDivertPower
+                or TaskTypes.AirshipShowersPickUpTowels
+                or TaskTypes.AirshipLoungeCleanToilet
+                or TaskTypes.AirshipVaultDressMannequin
+                or TaskTypes.AirshipArmoryPutAwayPistols
+                or TaskTypes.AirshipArmoryPutAwayRifles
+                or TaskTypes.AirshipMainHallDecontaminate
+                or TaskTypes.AirshipKitchenMakeBurger
+                or TaskTypes.AirshipShowersFixShower
                 => TaskCategories.ShortTask,
 
                 _ => throw new ArgumentException($"Invalid task type {taskType}")

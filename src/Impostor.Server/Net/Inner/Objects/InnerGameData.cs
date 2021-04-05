@@ -23,7 +23,7 @@ namespace Impostor.Server.Net.Inner.Objects
         private readonly Game _game;
         private readonly ConcurrentDictionary<byte, InnerPlayerInfo> _allPlayers;
 
-        public InnerGameData(ILogger<InnerGameData> logger, IEventManager eventManager, Game game, IServiceProvider serviceProvider)
+        public InnerGameData(ILogger<InnerGameData> logger, IEventManager eventManager, Game game, IServiceProvider serviceProvider) : base(game)
         {
             _logger = logger;
             _eventManager = eventManager;
@@ -85,12 +85,12 @@ namespace Impostor.Server.Net.Inner.Objects
                     var playerInfo = this.GetPlayerById(inner.Tag);
                     if (playerInfo != null)
                     {
-                        playerInfo.Deserialize(inner);
+                        playerInfo.Deserialize(inner, _eventManager, _game);
                     }
                     else
                     {
                         playerInfo = new InnerPlayerInfo(inner.Tag);
-                        playerInfo.Deserialize(inner);
+                        playerInfo.Deserialize(inner, _eventManager, _game);
 
                         if (!_allPlayers.TryAdd(playerInfo.PlayerId, playerInfo))
                         {
@@ -116,35 +116,6 @@ namespace Impostor.Server.Net.Inner.Objects
                     SetTasks(playerId, taskTypeIds);
                     break;
                 }
-
-                case RpcCalls.UpdateGameData:
-                {
-                    while (reader.Position < reader.Length)
-                    {
-                        using var message = reader.ReadMessage();
-                        var player = GetPlayerById(message.Tag);
-                        if (player != null)
-                        {
-                            player.Deserialize(message, _eventManager, _game);
-                        }
-                        else
-                        {
-                            var playerInfo = new InnerPlayerInfo(message.Tag);
-
-                            playerInfo.Deserialize(reader, _eventManager, _game);
-
-                            if (!_allPlayers.TryAdd(playerInfo.PlayerId, playerInfo))
-                            {
-                                throw new ImpostorException("Failed to add player to InnerGameData.");
-                            }
-                        }
-                    }
-
-                    break;
-                }
-
-                case RpcCalls.CustomRpc:
-                    return await HandleCustomRpc(reader, _game);
 
                 default:
                     return await UnregisteredCall(call, sender);
