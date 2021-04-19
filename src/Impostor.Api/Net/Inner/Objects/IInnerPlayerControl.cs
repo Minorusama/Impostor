@@ -38,7 +38,19 @@ namespace Impostor.Api.Net.Inner.Objects
         ValueTask SetNameAsync(string name);
 
         /// <summary>
-        ///     Sets the color of the current <see cref="IInnerPlayerControl" />.
+        ///     Sends a name for the current <see cref="IInnerPlayerControl"/> to a player.
+        ///     It doesn't change the actual name of the <see cref="IInnerPlayerControl"/>.
+        /// </summary>
+        /// <param name="name">A name for the player.</param>
+        /// <param name="player">
+        ///     The player that should receive this message.
+        ///     When left as null, will send message to self.
+        /// </param>
+        /// <returns>Task that must be awaited.</returns>
+        ValueTask SendNameToPlayerAsync(string name, IInnerPlayerControl? player = null);
+
+        /// <summary>
+        ///     Sets the color of the current <see cref="IInnerPlayerControl"/>.
         ///     Visible to all players.
         /// </summary>
         /// <param name="colorType">A color for the player.</param>
@@ -46,15 +58,39 @@ namespace Impostor.Api.Net.Inner.Objects
         ValueTask SetColorAsync(ColorType colorType);
 
         /// <summary>
-        ///     Sets the hat of the current <see cref="IInnerPlayerControl" />.
+        ///     Sends a color for the current <see cref="IInnerPlayerControl"/> to a player.
+        ///     It doesn't change the actual color of the <see cref="IInnerPlayerControl"/>.
+        /// </summary>
+        /// <param name="colorType">A color for the player.</param>
+        /// <param name="player">
+        ///     The player that should receive this message.
+        ///     When left as null, will send message to self.
+        /// </param>
+        /// <returns>Task that must be awaited.</returns>
+        ValueTask SendColorToPlayerAsync(ColorType colorType, IInnerPlayerControl? player = null);
+
+        /// <summary>
+        ///     Sets the hat of the current <see cref="IInnerPlayerControl"/>.
         ///     Visible to all players.
         /// </summary>
-        /// <param name="hatType">An hat for the player.</param>
+        /// <param name="hatType">A hat for the player.</param>
         /// <returns>Task that must be awaited.</returns>
         ValueTask SetHatAsync(HatType hatType);
 
         /// <summary>
-        ///     Sets the pet of the current <see cref="IInnerPlayerControl" />.
+        ///     Sends a hat for the current <see cref="IInnerPlayerControl"/> to a player.
+        ///     It doesn't change the actual hat of the <see cref="IInnerPlayerControl"/>.
+        /// </summary>
+        /// <param name="hatType">A hat for the player.</param>
+        /// <param name="player">
+        ///     The player that should receive this message.
+        ///     When left as null, will send message to self.
+        /// </param>
+        /// <returns>Task that must be awaited.</returns>
+        ValueTask SendHatToPlayerAsync(HatType hatType, IInnerPlayerControl? player = null);
+
+        /// <summary>
+        ///     Sets the pet of the current <see cref="IInnerPlayerControl"/>.
         ///     Visible to all players.
         /// </summary>
         /// <param name="petType">A pet for the player.</param>
@@ -62,7 +98,19 @@ namespace Impostor.Api.Net.Inner.Objects
         ValueTask SetPetAsync(PetType petType);
 
         /// <summary>
-        ///     Sets the skin of the current <see cref="IInnerPlayerControl" />.
+        ///     Sends a pet for the current <see cref="IInnerPlayerControl"/> to a player.
+        ///     It doesn't change the actual pet of the <see cref="IInnerPlayerControl"/>.
+        /// </summary>
+        /// <param name="petType">A pet for the player.</param>
+        /// <param name="player">
+        ///     The player that should receive this message.
+        ///     When left as null, will send message to self.
+        /// </param>
+        /// <returns>Task that must be awaited.</returns>
+        ValueTask SendPetToPlayerAsync(PetType petType, IInnerPlayerControl? player = null);
+
+        /// <summary>
+        ///     Sets the skin of the current <see cref="IInnerPlayerControl"/>.
         ///     Visible to all players.
         /// </summary>
         /// <param name="skinType">A skin for the player.</param>
@@ -70,7 +118,19 @@ namespace Impostor.Api.Net.Inner.Objects
         ValueTask SetSkinAsync(SkinType skinType);
 
         /// <summary>
-        ///     Send a chat message as the current <see cref="IInnerPlayerControl" />.
+        ///     Sends a skin for the current <see cref="IInnerPlayerControl"/> to a player.
+        ///     It doesn't change the actual skin of the <see cref="IInnerPlayerControl"/>.
+        /// </summary>
+        /// <param name="skinType">A skin for the player.</param>
+        /// <param name="player">
+        ///     The player that should receive this message.
+        ///     When left as null, will send message to self.
+        /// </param>
+        /// <returns>Task that must be awaited.</returns>
+        ValueTask SendSkinToPlayerAsync(SkinType skinType, IInnerPlayerControl? player = null);
+
+        /// <summary>
+        ///     Send a chat message as the current <see cref="IInnerPlayerControl"/>.
         ///     Visible to all players.
         /// </summary>
         /// <param name="text">The message to send.</param>
